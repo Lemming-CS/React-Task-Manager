@@ -13,7 +13,7 @@ export const useStore = create(
         })),
     }),
     {
-      name: 'app-storage', // key in localStorage
+      name: 'app-storage',
     }
   )
 );
