@@ -1,20 +1,36 @@
-import "./static/Login.css";
+import styles from "./static/Login.module.css";
 import { useState } from "react";
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../firebase/config";
 import googleIMG from "../assets/google.png";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import {db, auth} from "../firebase/config.js";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useStore } from "../store/useStore.js";
 
 function Login() {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
+  const setUser = useStore( state => state.setUser);
+
+  async function getFirestoreInfo(user) {
+      const userDoc = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userDoc);
+      await setUser(userSnap.data());
+  }
 
   const handleLogin = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      if (!user.emailVerified) {
+        setErrorMessage("Please verify your email before logging in.");
+        return;
+      }
+      await getFirestoreInfo(user);
       console.log("Logged in:", userCredential.user);
       navigate("/");
     }
@@ -38,22 +54,31 @@ function Login() {
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(auth, provider);
-      console.log("Google login:", result.user);
-      navigate("/");
-    } catch (error) {
-    if (error.code === "auth/weak-password") {
-          setErrorMessage("Password must be at least 6 characters.");
-        } else if (error.code === "auth/email-already-in-use") {
-          setErrorMessage("This email is already registered.");
-        } else {
-          setErrorMessage("Something went wrong. Try again.");
-        }
+      
+      const userCredential = await signInWithPopup(auth, provider);
+      const user = userCredential.user;
+      const userDocRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userDocRef);
+
+      if (!userSnap.exists()) {
+        await setDoc(userDocRef, {
+          username: user.displayName || "New User",
+          email: user.email,
+          createdAt: new Date()
+        });
       }
+
+      await getFirestoreInfo(user);
+      console.log("Google login:", user);
+      navigate("/");
+    }
+    catch (error) {
+        setErrorMessage(error.message);
+    }
   };
 
   return (
-    <div className="login">
+    <div className={styles.login}>
       <h1>Login</h1>
       <input
         type="email"
@@ -69,7 +94,7 @@ function Login() {
       />
       <span className="error">{errorMessage}</span>
       <button onClick={handleLogin}>Login</button>
-      <button className="google-btn" onClick={handleGoogleLogin}>
+      <button className={styles.googleBtn} onClick={handleGoogleLogin}>
         <img src={googleIMG} alt="Google Logo" />
         <span>Continue with Google</span>
       </button>

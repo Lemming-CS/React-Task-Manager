@@ -1,11 +1,12 @@
+import styles from "./static/Register.module.css"
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/config";
-import "./static/Register.css";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { db } from "../firebase/config";
 import { doc, setDoc } from "firebase/firestore";
+import { sendEmailVerification } from "firebase/auth";
 
 function Register() {
     const [email, setEmail] = useState("");
@@ -13,22 +14,28 @@ function Register() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState("");
+    const [showModal, setShowModal] = useState(false);
 
     const handleRegister = async () => {
         if (!userName) {
           setErrorMessage("Username shouldn't be empty!");
           return;
         }
+        else if (userName.length < 3 || userName.length > 20) {
+          setErrorMessage("Username must have length between 3 and 20 characters!")
+          return;
+        }
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-              await setDoc(doc(db, "users", user.uid), {
+            await sendEmailVerification(user);
+
+            await setDoc(doc(db, "users", user.uid), {
                 username: userName,
                 email: user.email,
                 createdAt: new Date()
               });
-            console.log("Succsesfully registered:" + userCredential.user);
-            navigate("/login");
+            setShowModal(true)
         }
         catch (error) {
           if (error.code === "auth/weak-password") {
@@ -42,7 +49,7 @@ function Register() {
     }
 
   return <>
-    <div className="register">
+    <div className={styles.register}>
       <h1>Register</h1>
       <input
         type="input"
@@ -62,6 +69,22 @@ function Register() {
         value={password}
         onChange={e => setPassword(e.target.value)}
       />
+      {showModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <h2>Email Verification</h2>
+            <p>
+              We sent a verification email. Please verify your account before logging in. Check the spam folder if you didn't get it.
+            </p>
+            <button onClick={() => {
+              setShowModal(false);
+              navigate("/login");
+            }}>
+              OK
+            </button>
+          </div>
+        </div>
+      )}
       <span className="error">{errorMessage}</span>
       <button onClick={handleRegister}>Register</button>
       <Link to="/login" id="redirect">Login Page</Link>
