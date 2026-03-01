@@ -40,7 +40,7 @@ function Home() {
           <img src={defaultUserIMG} />
           {user.username}
         </button>
-        <div className={styles.headerRight}> 
+        <div className="headerRight"> 
           <button onClick={toggleTheme} id="themeButton">
             {theme === "light" ? <img src={sun}/> : <img src={moon}/>}
           </button>
