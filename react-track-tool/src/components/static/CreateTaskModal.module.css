@@ -1,0 +1,96 @@
+.openBtn {
+  min-height: 44px;
+  border-radius: 12px;
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+}
+.modal * {
+  box-sizing: border-box;
+}
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 18px;
+  z-index: 999;
+}
+
+.modal {
+  width: 520px;
+  max-width: 100%;
+  background: var(--card-bg);
+  color: var(--text);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 18px 50px rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.x {
+  min-height: 36px;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+
+.label {
+  display: block;
+  text-align: left;
+  margin: 10px 0 6px;
+  font-weight: 700;
+  opacity: 0.9;
+  font-size: 13px;
+}
+
+.modal input,
+.modal textarea,
+.modal select {
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: var(--bg);
+  color: var(--text);
+}
+
+select option {
+    background: var(--card-bg);
+}
+select option:checked {
+    background: var(--accent);
+    color: white;
+}
+.modal textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.col { flex: 1; }
+
+.actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.secondary {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.16);
+}

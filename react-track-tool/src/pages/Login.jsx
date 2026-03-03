@@ -55,9 +55,13 @@ function Login() {
 
       if (!userSnap.exists()) {
         const newUser = {
+          uid: user.uid,
           username: user.displayName || "New User",
           email: user.email,
-          createdAt: new Date()
+          bio: "",
+          profilePicture: null,
+          usernameLower: user.displayName.trim().toLowerCase() || "new user",
+          createdAt: new Date(),
         };
         await setDoc(userDocRef, newUser);
         setUser(newUser);

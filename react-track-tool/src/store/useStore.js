@@ -13,6 +13,8 @@ export const useStore = create(
           localStorage.setItem("theme", newTheme);
           return { theme: newTheme };
         }),
+      invites: [],
+      setInvites: (invites) => set({ invites }),
     }),
     {
       name: 'app-storage',

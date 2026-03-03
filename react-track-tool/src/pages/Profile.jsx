@@ -1,4 +1,4 @@
-import { updateDoc, doc, getDoc, setDoc} from 'firebase/firestore';
+import { updateDoc, doc, getDoc, setDoc, deleteDoc} from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { auth, db, storage } from "../firebase/config";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,7 @@ import { useRef } from 'react';
 import { updatePassword } from 'firebase/auth';
 import { getAuth, EmailAuthProvider, linkWithCredential } from "firebase/auth";
 import { sendEmailVerification } from 'firebase/auth';
+import { deleteUser } from "firebase/auth";
 
 function Profile() {
     const setUser = useStore(state => state.setUser);
@@ -23,6 +24,35 @@ function Profile() {
     const imageRef = useRef(null);
     const [showModal, setShowModal] = useState(false);
     const [newPassword, setNewPassword] = useState("");
+    const [bio, setBio] = useState("");
+    const created = user?.createdAtMs ? new Date(user.createdAtMs).toLocaleDateString() : "—";
+
+    useEffect(() => {
+        const fetchUserBio = async () => {
+            if (!user?.uid) return;
+            try {
+                const userDoc = doc(db, "users", user.uid);
+                const docSnap = await getDoc(userDoc);
+                if (docSnap.exists()) {
+                    setBio(docSnap.data().bio || "");
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchUserBio();
+    }, [user?.uid]);
+
+    const changeBio = async () => {
+        try {
+            const userRef = doc(db, "users", user.uid);
+            await updateDoc(userRef, { bio });
+            setUser({ ...user, bio });
+            alert("Bio updated successfully!");
+        } catch (err) {
+            setErrorMessage(err.message);
+        }
+    };
 
     const changePassword = async () => {
         if (!auth.currentUser) return;
@@ -33,7 +63,6 @@ function Profile() {
 
         if (!isPasswordUser) {
             try {
-                const auth = getAuth();
                 const user = auth.currentUser;
 
                 const credential = EmailAuthProvider.credential(user.email, newPassword);
@@ -85,7 +114,41 @@ function Profile() {
             setErrorMessage(err.message);
         }
     };
+    const deleteAccount = async () => {
+        if (!auth.currentUser) return;
 
+        const confirmDelete = window.confirm(
+            "Are you sure you want to permanently delete your account? This cannot be undone."
+        );
+
+        if (!confirmDelete) return;
+
+        try {
+            const uid = auth.currentUser.uid;
+
+
+            try {
+            const storageRef = ref(storage, `profile_pictures/${uid}`);
+            await deleteObject(storageRef);
+            } catch (e) {
+            }
+
+            await deleteDoc(doc(db, "users", uid));
+
+            await deleteUser(auth.currentUser);
+
+            setUser(null);
+
+            navigate("/login");
+        } catch (error) {
+            if (error.code === "auth/requires-recent-login") {
+            alert("Please re-login before deleting your account.");
+            } else {
+            console.error(error);
+            setErrorMessage(error.message);
+            }
+        }
+    };
     const changeProfilePic = async (imageFile) => {
         if (!imageFile) return null;
         if (!user) return null;
@@ -135,7 +198,7 @@ function Profile() {
     }
     return (
     <div className={styles.container}>
-        <Header showHome />
+        <Header showHome showBell/>
         <div className={styles.profile}>
             <div className={styles.profileInfo}>
                 <div className={styles.profileData}>
@@ -147,15 +210,32 @@ function Profile() {
                 </div>
                 <h3>{user.email}</h3>
             </div>
-            <div className={styles.changeCredentials}>
-                <input type="text" placeholder="Change Username" value={usernameChange} autoComplete="New-Username" onChange={e => setUsernameChange(e.target.value)}/>
-                <button onClick={changeUsername}>Change</button>
+            <div className={styles.profileData}>
+                <div className={styles.biography}>
+                    <label>Bio</label>
+                    <textarea
+                        value={bio}
+                        placeholder="Tell us about yourself..."
+                        onChange={e => setBio(e.target.value)}
+                    />
+                    <button onClick={changeBio}>Update</button>
+                </div>
+
+                <div className={styles.credentialsContainer}>
+                    <div className={styles.changeCredentials}>
+                        <input type="text" placeholder="Change Username" value={usernameChange} autoComplete="New-Username" onChange={e => setUsernameChange(e.target.value)}/>
+                        <button onClick={changeUsername}>Change</button>
+                    </div>
+                    <div className={styles.changeCredentials}>
+                        <input type="password" placeholder="Change Password" value={newPassword} autoComplete="New-Password" onChange={e => setNewPassword(e.target.value)}/>
+                        <button onClick={changePassword}>Change</button>
+                    </div>
+                    <span className="error">{errorMessage}</span>
+                </div>
             </div>
-            <div className={styles.changeCredentials}>
-                <input type="password" placeholder="Change Password" value={newPassword} autoComplete="New-Password" onChange={e => setNewPassword(e.target.value)}/>
-                <button onClick={changePassword}>Change</button>
-            </div>
-            <span className="error">{errorMessage}</span>
+                <h3>Member since: {created}</h3>
+                <button onClick={deleteAccount} style={{marginTop: "20px", background: "#ff3b30", color: "white"}}>Delete Account</button>
+
         </div>
 {showModal && (
     <div className={styles.modalOverlay}>
@@ -173,7 +253,6 @@ function Profile() {
     </div>
 )}
     </div>
-    )
-}
+)};
 
 export default Profile;

@@ -5,7 +5,7 @@ import { auth } from "../firebase/config";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { db } from "../firebase/config";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { sendEmailVerification } from "firebase/auth";
 import Header from "../components/Header";
 function Register() {
@@ -32,10 +32,14 @@ function Register() {
             sendEmailVerification(user);
 
             await setDoc(doc(db, "users", user.uid), {
-                username: userName.trim(),
-                email: user.email,
-                createdAt: new Date()
-              });
+              uid: user.uid,
+              username: userName,
+              email: user.email,
+              bio: "",
+              profilePicture: null,
+              usernameLower: userName.trim().toLowerCase(),
+              createdAt: serverTimestamp()
+            });
             setShowModal(true)
         }
         catch (error) {
