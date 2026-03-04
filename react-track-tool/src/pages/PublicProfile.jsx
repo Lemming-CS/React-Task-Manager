@@ -21,7 +21,7 @@ function PublicProfile() {
             const docSnap = await getDoc(userRef);
             if (docSnap.exists()) {
                 setUserData(docSnap.data());
-                setCreated(userData?.createdAtMs ? new Date(userData.createdAtMs).toLocaleDateString() : "—");
+                setCreated(docSnap.data()?.createdAt ? new Date(docSnap.data().createdAt).toLocaleDateString() : "—");
             } else {
                 setUserData("Not Found");
             }
