@@ -148,3 +148,20 @@
     display: flex;
     align-items: center;
 }
+.assigneeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  min-height: auto;
+  background: var(--button-bg);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.assigneeAvatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+}

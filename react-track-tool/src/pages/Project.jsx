@@ -23,7 +23,11 @@ function Project() {
     const [openInvite, setOpenInvite] = useState(false);
     const [isOwner, setIsOwner] = useState(false);
     const [collabs, setCollabs] = useState([]);
-
+    const collabsById = useMemo(() => {
+        const m = new Map();
+        collabs.forEach(u => m.set(u.uid, u));
+        return m;
+    }, [collabs]);
     useEffect(() => {
         let alive = true;
 
@@ -227,6 +231,24 @@ function Project() {
             {t.description && <p className={styles.taskDesc}>{t.description}</p>}
 
             <div className={styles.metaRow}>
+            {t.assignedTo && (
+            <span className={styles.meta}>
+                <b>Assigned:</b>{" "}
+                <button
+                type="button"
+                className={styles.assigneeBtn}
+                onClick={() => navigate(`/profile/${t.assignedTo}`)}
+                title="Open assignee profile"
+                >
+                <img
+                    className={styles.assigneeAvatar}
+                    src={(collabsById.get(t.assignedTo)?.profilePicture) || defaultUser}
+                    alt="assignee"
+                />
+                {collabsById.get(t.assignedTo)?.username || t.assignedTo.slice(0, 6)}
+                </button>
+            </span>
+            )}
                 
             <span className={styles.meta}><b>Priority:</b> {t.priority || "Normal"}</span>
             {t.deadline?.toDate && (
