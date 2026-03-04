@@ -5,7 +5,7 @@ import {
 addDoc, collection, serverTimestamp, Timestamp
 } from "firebase/firestore";
 import styles from "./static/CreateTaskModal.module.css";
-
+import AssigneeSelect from "./AssigneeSelect";
 export default function CreateTaskModal({ projectId, members = [] }) {
     const me = useStore(s => s.user);
 
@@ -110,11 +110,11 @@ export default function CreateTaskModal({ projectId, members = [] }) {
                 </div>
 
                 <div className={styles.col}>
-                    <label className={styles.label}>Assigned to (uid)</label>
-                    <input
-                    placeholder="optional uid"
+                    <AssigneeSelect
+                    membersUids={members}
+                    meUid={me?.uid}
                     value={assignedTo}
-                    onChange={e => setAssignedTo(e.target.value)}
+                    onChange={setAssignedTo}
                     />
                 </div>
                 </div>
