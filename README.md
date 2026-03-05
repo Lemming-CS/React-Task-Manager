@@ -1,21 +1,35 @@
-# React Task Manager
+# Realtime Collaborative Task Manager
+
+🔗 **Live Demo:** https://react-task-manager-nine-rho.vercel.app/
 
 A real-time task tracking tool for small teams — built with React, Zustand, and Firebase.
 
-🔗 **[Live Demo](https://react-task-manager-nine-rho.vercel.app/)**
 
 ---
 
 ## Features
 
 - **Authentication** — Email/password login, Google & GitHub social login
-- **User Profiles** — Edit username, password, and bio (stored in Firestore); delete account; public profile pages (`/profiles/:uid`) showing profile picture, bio, and member-since date — accessible to any logged-in user and linkable from project collaborator lists
+- **User Profiles** — Edit username, password, and bio (stored in Firestore); delete account; public profile pages (`/profile/:uid`) showing profile picture, bio, and member-since date — accessible to any logged-in user and linkable from project collaborator lists
 - **Projects** — Create, edit, and delete projects; invite team members
 - **Tasks** — Create tasks with title, status, priority, and assignee
 - **Real-time sync** — Task updates appear instantly for all project members via Firebase
 - **Dark / Light mode** — Persisted UI theme preference
 - **Toast notifications** — Global feedback system via Zustand state
 - **Protected routes** — Only authenticated users can access the dashboard
+
+---
+
+## Realtime Architecture
+
+Task updates propagate instantly across clients:
+
+Firestore
+→ `onSnapshot` listeners
+→ React state updates
+→ UI re-render
+
+No polling or manual refresh is required.
 
 ---
 
