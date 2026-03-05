@@ -3,14 +3,13 @@ import { collection, getDocs, query, where, documentId } from "firebase/firestor
 import { db } from "../firebase/config";
 import defaultUser from "../assets/defaultUser.png";
 
-export default function AssigneeSelect({ membersUids = [], meUid, value, onChange }) {
+export default function AssigneeSelect({ membersUids = [], value, onChange }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // exclude me
   const uids = useMemo(
-    () => (membersUids || []).filter((u) => u && u !== meUid),
-    [membersUids, meUid]
+    () => (membersUids || []),
+    [membersUids]
   );
 
   useEffect(() => {

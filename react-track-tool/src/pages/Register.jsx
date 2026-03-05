@@ -33,7 +33,7 @@ function Register() {
 
             await setDoc(doc(db, "users", user.uid), {
               uid: user.uid,
-              username: userName,
+              username: userName.trim(),
               email: user.email,
               bio: "",
               profilePicture: null,
