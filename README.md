@@ -1,9 +1,8 @@
 # Realtime Collaborative Task Manager
 
-🔗 **Live Demo:** https://realtime-collaborative-task-manager.vercel.app/
-
 A real-time task tracking tool for small teams — built with React, Zustand, and Firebase.
 
+🔗 **Live Demo:** https://realtime-collaborative-task-manager.vercel.app/
 
 ---
 
@@ -45,18 +44,18 @@ No polling or manual refresh is required.
 | Deployment | Vercel |
 
 ---
-
 ## Running Locally
 
-> **Note:** This project uses a private Firebase backend. You would need to provision your own Firebase project to run it locally — Firestore, Authentication (Email/Password, Google, GitHub), and Storage all need to be enabled.
+> **Note:** This project uses Firebase services (Firestore, Authentication, Storage).  
+> To run it locally you must create your own Firebase project and configure the environment variables.
 
 ```bash
-git clone https://github.com/Lemming-CS/React-Task-Manager.git
-cd React-Task-Manager/react-track-tool
+git clone https://github.com/Lemming-CS/realtime-collaborative-task-manager.git
+cd realtime-collaborative-task-manager
 npm install
 ```
 
-Create a `.env` file in `react-track-tool/` with your Firebase config:
+Create a `.env` file in the project root:
 
 ```env
 VITE_FIREBASE_API_KEY=your_api_key
@@ -67,24 +66,30 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 VITE_FIREBASE_APP_ID=your_app_id
 ```
 
+Run the development server:
+
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+Open http://localhost:5173 in your browser.
 
 ---
 
 ## Project Structure
 
 ```
-react-track-tool/
+.
 ├── src/
-│   ├── components/       # Reusable UI components
-│   ├── pages/            # Route-level views (Dashboard, Project, Login...)
-│   ├── store/            # Zustand stores (auth, theme, notifications)
-│   ├── firebase/         # Firebase config and service helpers
+│   ├── components/
+│   ├── hooks/
+│   ├── pages/
+│   ├── store/
+│   ├── firebase/
 │   └── App.jsx
+├── package.json
+├── vite.config.js
+└── README.md
 ```
 
 ---
