@@ -48,7 +48,7 @@ function Register() {
           } else if (error.code === "auth/email-already-in-use") {
             setErrorMessage("This email is already registered.");
           } else {
-            setErrorMessage("Something went wrong. Try again.");
+            setErrorMessage(error.code);
           }
         }
     }
