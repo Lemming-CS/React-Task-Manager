@@ -1,65 +1,75 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.55);
+  z-index: 50;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
-  z-index: 50;
+  background: rgba(5, 8, 14, 0.62);
+  backdrop-filter: blur(6px);
 }
 
 .modal {
   width: 100%;
-  max-width: 520px;
-  background: var(--card-bg);
+  max-width: 560px;
+  padding: 24px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, var(--card-bg), var(--card-bg-2));
   color: var(--text);
-  border-radius: 16px;
-  padding: 22px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+}
+.modal * {
+  box-sizing: border-box;
+}
+.modal h2 {
+  margin: 0;
+  font-size: 24px;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  margin-top: 12px;
+  gap: 16px;
+  margin-top: 18px;
 }
 
-label {
+.form label {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  font-weight: 600;
-}
-
-input, textarea {
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(120,120,120,0.35);
-  background: transparent;
-  color: inherit;
-  font-weight: 500;
-}
-
-textarea {
-  min-height: 90px;
-  resize: vertical;
+  gap: 8px;
+  font-weight: 700;
 }
 
 .error {
-  color: #ff4d4d;
-  font-weight: 600;
+  color: var(--danger);
+  font-weight: 700;
 }
 
 .actions {
   display: flex;
-  gap: 10px;
   justify-content: flex-end;
-  margin-top: 6px;
+  gap: 10px;
+  margin-top: 8px;
 }
 
 .secondary {
   background: transparent;
-  border: 1px solid rgba(120,120,120,0.35);
+  border: 1px solid var(--border);
+}
+
+@media (max-width: 560px) {
+  .modal {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .actions button {
+    width: 100%;
+  }
 }

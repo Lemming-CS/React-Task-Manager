@@ -84,8 +84,14 @@ function PublicProfile() {
                     <h3>{userData.username}</h3>
                 </div>
             </div>
-         <p>{userData.bio}</p>
-         <p>Member since: {created}</p>
+            {userData.bio &&             (        
+            <div className={styles.biography}>
+                <label>Bio</label>
+                <p>{userData.bio}</p>
+            </div>
+            )}
+
+         <p className={styles.metaText}>Member since: {created}</p>
         </div>
 {showModal && (
     <div className={styles.modalOverlay}>

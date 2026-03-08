@@ -1,42 +1,109 @@
 .page {
   min-height: 100vh;
-  padding: 20px 30px;
+  padding: 22px 24px 40px;
   color: var(--text);
-  background: var(--bg);
+  background: transparent;
 }
 
-.top {
-  max-width: 1100px;
-  margin: 18px auto 0;
+.hero {
+  max-width: 1180px;
+  margin: 20px auto 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  gap: 20px;
+  align-items: start;
+}
+
+.heroMain {
+  padding: 24px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, var(--card-bg), var(--card-bg-2));
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+}
+
+.heroSide {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 16px;
+  justify-content: flex-end;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .title {
   margin: 0;
-  font-size: 32px;
+  font-size: clamp(30px, 4vw, 42px);
+  line-height: 1.05;
+}
+
+.roleBadge {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  border: 1px solid rgba(124, 140, 255, 0.24);
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .desc {
-  margin: 6px 0 0;
-  opacity: 0.85;
-  max-width: 700px;
+  margin: 12px 0 0;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 760px;
+}
+
+.projectMeta {
+  margin: 12px 0 0;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.inviteBtn {
+  margin-top: 16px;
 }
 
 .muted {
   opacity: 0.8;
 }
+
+.sectionHeader {
+  max-width: 1180px;
+  margin: 28px auto 0;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 24px;
+}
+
+.sectionSub {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
 .collabBlock {
-  margin-top: 14px;
-  max-width: 700px;
+  margin-top: 22px;
 }
 
 .collabTitle {
-  margin: 12px 0 8px;
+  margin: 0 0 12px;
   font-size: 14px;
-  opacity: 0.9;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .collabList {
@@ -46,79 +113,99 @@
 }
 
 .collabItem {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 10px;
+  min-height: 0;
+  padding: 8px 12px;
   border-radius: 999px;
   background: var(--button-bg);
-  color: var(--text);
-  border: 1px solid rgba(255,255,255,0.06);
-  min-height: auto;
+  border: 1px solid var(--border);
 }
 
 .collabAvatar {
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .collabName {
   font-size: 13px;
   white-space: nowrap;
 }
+
 .taskGrid {
-  max-width: 1100px;
-  margin: 18px auto;
+  max-width: 1180px;
+  margin: 18px auto 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-}
-
-@media (max-width: 900px) {
-  .taskGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (max-width: 600px) {
-  .taskGrid { grid-template-columns: 1fr; }
+  gap: 18px;
 }
 
 .taskCard {
-  background: var(--card-bg);
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 10px 28px rgba(0,0,0,0.22);
-  border: 1px solid rgba(255,255,255,0.06);
+  padding: 18px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, var(--card-bg), var(--card-bg-2));
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
 }
 
 .taskHead {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
   align-items: flex-start;
+  gap: 12px;
+}
+
+.taskTitleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .taskTitle {
   margin: 0;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.25;
+  word-break: break-word;
 }
 
 .taskDesc {
-  margin: 10px 0 0;
-  opacity: 0.85;
+  margin: 12px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
   font-size: 14px;
 }
 
 .metaRow {
-  margin-top: 12px;
+  margin-top: 16px;
   display: flex;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
-  opacity: 0.9;
+}
+
+.metaPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
   font-size: 13px;
 }
 
+.metaLabel {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
 .statusChip {
+  width: fit-content;
   padding: 6px 10px;
   border-radius: 999px;
   font-size: 12px;
@@ -144,24 +231,53 @@
   border: 1px solid rgba(52, 199, 89, 0.35);
 }
 
-.taskHead {
-    display: flex;
-    align-items: center;
-}
 .assigneeBtn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 10px;
+  min-height: 0;
+  padding: 4px 8px;
   border-radius: 999px;
-  min-height: auto;
-  background: var(--button-bg);
-  color: var(--text);
-  cursor: pointer;
+  background: transparent;
+  border: none;
 }
 
 .assigneeAvatar {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
+  object-fit: cover;
+}
+
+@media (max-width: 1000px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .heroSide {
+    justify-content: flex-start;
+  }
+
+  .taskGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .page {
+    padding: 18px 16px 30px;
+  }
+
+  .heroMain {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .taskGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .taskCard {
+    border-radius: 18px;
+  }
 }

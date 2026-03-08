@@ -1,5 +1,5 @@
 import styles from "./static/Home.module.css";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useStore } from "../store/useStore";
 import Header from "../components/Header";
 import CreateProjectModal from "../components/CreateProjectModal";
@@ -15,7 +15,6 @@ import {
   arrayRemove,
   setDoc,
   serverTimestamp,
-  documentId,
 } from "firebase/firestore";
 import { db } from "../firebase/config";
 import { useNavigate } from "react-router-dom";
@@ -72,7 +71,7 @@ function Home() {
       createdAt: serverTimestamp(),
     };
 
-    await setDoc(projectRef, payload); 
+    await setDoc(projectRef, payload);
   };
 
   const deleteProject = async (projectId) => {
@@ -99,12 +98,21 @@ function Home() {
 
   return (
     <div className={styles.container}>
-      <Header showProfile showBell/>
+      <Header showProfile showBell />
 
       <div className={styles.content}>
-        <div className={styles.topRow}>
-          <h1>Welcome, {user?.username}</h1>
-          <button onClick={() => setOpenCreate(true)}>+ Create project</button>
+        <div className={styles.hero}>
+          <div>
+            <p className={styles.eyebrow}>Dashboard</p>
+            <h1 className={styles.heading}>Welcome, {user?.username}</h1>
+            <p className={styles.subheading}>
+              Manage your projects, collaborators, and tasks in real time.
+            </p>
+          </div>
+
+          <button className={styles.primaryCta} onClick={() => setOpenCreate(true)}>
+            + Create project
+          </button>
         </div>
 
         <CreateProjectModal
@@ -113,37 +121,60 @@ function Home() {
           onCreate={createProject}
         />
 
-        {loading && <p>Loading projects…</p>}
+        {loading && <p className={styles.infoText}>Loading projects…</p>}
         {err && <p className="error">{err}</p>}
 
         {!loading && !err && projects.length === 0 && (
-          <p>No projects yet. Create your first one</p>
+          <div className={styles.emptyState}>
+            <h3>No projects yet</h3>
+            <p>Create your first project to start collaborating.</p>
+          </div>
         )}
 
         <div className={styles.projects}>
           {projects.map((p) => {
             const isOwner = p.ownerId === user.uid;
+
             return (
               <div key={p.id} className={styles.projectCard}>
                 <div className={styles.projectTop}>
-                  <h2 className={styles.projectTitle}>
-                    {p.title}
-                  </h2>
-                  <span className={styles.badge}>
-                    {isOwner ? "Owner" : "Member"}
-                  </span>
+                  <div className={styles.projectTitleWrap}>
+                    <h2 className={styles.projectTitle}>{p.title}</h2>
+                    <span className={styles.badge}>
+                      {isOwner ? "Owner" : "Member"}
+                    </span>
+                  </div>
                 </div>
 
                 {p.description && <p className={styles.desc}>{p.description}</p>}
-                {p.deadline && <p className={styles.desc}>Deadlne: {p.deadline}</p>}
+
+                {p.deadline && (
+                  <p className={styles.metaLine}>
+                    <span className={styles.metaLabel}>Deadline</span>
+                    <span>{p.deadline}</span>
+                  </p>
+                )}
+
                 <div className={styles.projectActions}>
-                  <button onClick={() => navigate(`/project/${p.id}`)}>Open</button>
+                  <button
+                    className={styles.openBtn}
+                    onClick={() => navigate(`/project/${p.id}`)}
+                  >
+                    Open
+                  </button>
+
                   {isOwner ? (
-                    <button onClick={() => deleteProject(p.id)}>
+                    <button
+                      className={styles.dangerBtn}
+                      onClick={() => deleteProject(p.id)}
+                    >
                       Delete project
                     </button>
                   ) : (
-                    <button onClick={() => leaveProject(p.id)}>
+                    <button
+                      className={styles.secondaryBtn}
+                      onClick={() => leaveProject(p.id)}
+                    >
                       Leave project
                     </button>
                   )}

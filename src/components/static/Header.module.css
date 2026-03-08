@@ -1,40 +1,75 @@
-.container {
-  min-height: 100vh;
-}
-
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  padding: 20px 30px;
-
+  padding: 18px 28px;
   background: var(--header-bg);
-  border-radius: 12px;
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
 }
 
-.header button {
-  min-height: 60px;
-}
-
+.left,
 .headerRight {
   display: flex;
-  gap: 15px;
   align-items: center;
+  gap: 14px;
 }
 
 .profileButton {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 10px;
-
-  background: var(--button-bg);
-  color: var(--text);
-  border-radius: 12px;
   padding: 8px 12px;
+  border-radius: 14px;
 }
 
-.left {
-  display: flex;
-  gap: 30px;
+.profileButton img {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.bell {
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--danger);
+  color: white;
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+@media (max-width: 720px) {
+  .header {
+    padding: 14px 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .left,
+  .headerRight {
+    gap: 10px;
+  }
+
+  .profileButton {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }

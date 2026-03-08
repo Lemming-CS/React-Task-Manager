@@ -236,9 +236,12 @@ function Profile() {
                     <span className="error">{errorMessage}</span>
                 </div>
             </div>
-                <h3>Member since: {created}</h3>
-                <button onClick={deleteAccount} style={{marginTop: "20px", background: "#ff3b30", color: "white"}}>Delete Account</button>
-
+            <p className={styles.metaText}>Member since: {created}</p>
+            <div className={styles.dangerZone}>
+                <button onClick={deleteAccount} className={styles.deleteBtn}>
+                    Delete Account
+                </button>
+            </div>
         </div>
 {showModal && (
     <div className={styles.modalOverlay}>
