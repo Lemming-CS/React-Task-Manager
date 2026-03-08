@@ -45,9 +45,14 @@ function Register() {
         catch (error) {
           if (error.code === "auth/weak-password") {
             setErrorMessage("Password must be at least 6 characters.");
-          } else if (error.code === "auth/email-already-in-use") {
+          } 
+          else if (error.code === "auth/email-already-in-use") {
             setErrorMessage("This email is already registered.");
-          } else {
+          } 
+          else if (error.code === "auth/password-does-not-meet-requirements") {
+            setErrorMessage("Password must be 6 characters long, have one lowercase and numeric character"); 
+          }
+          else {
             setErrorMessage(error.code);
           }
         }
