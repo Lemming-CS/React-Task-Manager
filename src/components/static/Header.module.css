@@ -11,6 +11,9 @@
   border-bottom: 1px solid var(--border);
 }
 
+.header button {
+  height: 60px;
+}
 .left,
 .headerRight {
   display: flex;
@@ -27,11 +30,18 @@
 }
 
 .profileButton img {
-  width: 34px;
-  height: 34px;
+  width: 100%;
   border-radius: 50%;
   object-fit: cover;
 }
+
+#themeButton {
+  width: 60px;
+  height: 60px;
+  padding: 10px;
+}
+
+
 
 .bell {
   position: relative;

@@ -35,7 +35,7 @@ return (
     </div>
 
     <div className={styles.headerRight}>
-      <button onClick={toggleTheme} id="themeButton">
+      <button onClick={toggleTheme} id={styles.themeButton}>
         {theme === "light"
           ? <img src={sun} />
           : <img src={moon} />}
