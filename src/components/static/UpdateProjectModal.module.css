@@ -59,7 +59,7 @@
   border: 1px solid var(--border);
 }
 
-@media (max-width: 560px) {
+@media (max-width: 768px) {
   .modal {
     padding: 18px;
     border-radius: 18px;

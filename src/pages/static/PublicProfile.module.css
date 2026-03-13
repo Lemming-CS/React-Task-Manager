@@ -55,7 +55,9 @@
   height: 112px;
   object-fit: cover;
   border-radius: 50%;
-  transition: filter 0.2s ease, transform 0.2s ease;
+  transition:
+    filter 0.2s ease,
+    transform 0.2s ease;
 }
 
 .profileImage:hover img {
@@ -81,13 +83,11 @@
   color: var(--text);
 }
 
-
 .metaText {
   margin: 0;
   color: var(--muted);
   font-weight: 600;
 }
-
 
 .modalOverlay {
   position: fixed;
@@ -121,9 +121,7 @@
   border-radius: 18px;
 }
 
-
-
-@media (max-width: 760px) {
+@media (max-width: 768px) {
   .profile {
     width: min(100vw - 20px, 100%);
     margin: 18px auto 28px;
@@ -138,5 +136,4 @@
   .profileData {
     width: 100%;
   }
-
 }

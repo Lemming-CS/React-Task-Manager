@@ -40,8 +40,6 @@
   padding: 10px;
 }
 
-
-
 .bell {
   position: relative;
 }
@@ -63,7 +61,7 @@
   line-height: 1;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .header {
     padding: 14px 16px;
     flex-wrap: wrap;

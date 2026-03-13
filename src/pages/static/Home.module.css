@@ -181,7 +181,7 @@
   border: 1px solid rgba(255, 93, 93, 0.2);
 }
 
-@media (max-width: 760px) {
+@media (max-width: 768px) {
   .content {
     padding: 22px 16px 32px;
   }
@@ -194,5 +194,4 @@
   .primaryCta {
     width: 100%;
   }
-
 }

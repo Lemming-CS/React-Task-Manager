@@ -1,19 +1,16 @@
 .login {
+  width: min(440px, calc(100vw - 24px));
   display: flex;
   flex-direction: column;
   gap: 20px;
   align-items: center;
-
-  width: 380px;
   padding: 40px;
-
-  margin: 15vh auto;
-
-  border-radius: 20px;
-  background: var(--card-bg);
-
+  max-width: 380px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
   transition: background 0.3s ease;
+  margin: clamp(32px, 10vh, 110px) auto;
+  border-radius: 20px;
+  background: var(--card-bg);
 }
 
 .login h1 {
@@ -84,4 +81,20 @@ body[data-theme="dark"] .googleBtn {
   background: var(--button-bg);
   color: var(--text);
   border: 1px solid var(--button-bg);
+}
+
+@media (max-width: 768px) {
+  .login {
+    max-width: 380px;
+    width: 70vw;
+  }
+
+  .login h1 {
+    font-size: 32px;
+  }
+
+  .login button,
+  .googleBtn {
+    min-height: 46px;
+  }
 }
