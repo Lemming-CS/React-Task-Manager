@@ -8,10 +8,10 @@ import styles from "./static/Header.module.css";
 import defaultUser from "../assets/defaultUser.png";
 
 function Header({ showHome, showProfile, showBell }) {
-  const theme = useStore(state => state.theme);
-  const toggleTheme = useStore(state => state.toggleTheme);
-  const user = useStore(state => state.user);
-  const invites = useStore(s => s.invites);
+  const theme = useStore((state) => state.theme);
+  const toggleTheme = useStore((state) => state.toggleTheme);
+  const user = useStore((state) => state.user);
+  const invites = useStore((s) => s.invites);
 
   const navigate = useNavigate();
 
@@ -19,37 +19,38 @@ function Header({ showHome, showProfile, showBell }) {
     signOut(auth);
   };
 
-return (
-  <div className={styles.header}>
-    <div className={styles.left}>
-      {showHome && (
-        <button onClick={() => navigate("/")}>Home</button>
-      )}
+  return (
+    <div className={styles.header}>
+      <div className={styles.left}>
+        {showHome && <button onClick={() => navigate("/")}>Home</button>}
 
-      {showProfile && user && (
-        <button onClick={() => navigate("/profile")} className={styles.profileButton}>
-          <img src={user.profilePicture || defaultUser} />
-          {user.username}
+        {showProfile && user && (
+          <button
+            onClick={() => navigate("/profile")}
+            className={styles.profileButton}
+          >
+            <img src={user.profilePicture || defaultUser} />
+            {user.username}
+          </button>
+        )}
+      </div>
+
+      <div className={styles.headerRight}>
+        <button onClick={toggleTheme} id={styles.themeButton}>
+          {theme === "light" ? <img src={sun} /> : <img src={moon} />}
         </button>
-      )}
+        {showBell && user && (
+          <button className={styles.bell} onClick={() => navigate("/invites")}>
+            🔔
+            {invites.length > 0 && (
+              <span className={styles.badge}>{invites.length}</span>
+            )}
+          </button>
+        )}
+        {user && <button onClick={logOut}>Log Out</button>}
+      </div>
     </div>
-
-    <div className={styles.headerRight}>
-      <button onClick={toggleTheme} id={styles.themeButton}>
-        {theme === "light"
-          ? <img src={sun} />
-          : <img src={moon} />}
-      </button>
-      {showBell && user &&       
-      <button className={styles.bell} onClick={() => navigate("/invites")}>
-        🔔
-        {invites.length > 0 && <span className={styles.badge}>{invites.length}</span>}
-      </button>}
-
-      {user && <button onClick={logOut}>Log Out</button>}
-    </div>
-  </div>
-);
+  );
 }
 
 export default Header;

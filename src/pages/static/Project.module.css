@@ -249,6 +249,14 @@
   object-fit: cover;
 }
 
+.dangerBtn {
+  margin-top: 20px;
+  background: var(--danger-soft);
+  flex: 2;
+  color: var(--danger);
+  border: 1px solid rgba(255, 93, 93, 0.2);
+}
+
 @media (max-width: 1000px) {
   .hero {
     grid-template-columns: 1fr;

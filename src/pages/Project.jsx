@@ -15,6 +15,7 @@ import {
   getDocs,
   where,
   documentId,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebase/config";
 import styles from "./static/Project.module.css";
@@ -149,6 +150,17 @@ function Project() {
 
     return () => unsub();
   }, [allowed, projectId]);
+
+  const deleteTask = async (taskId) => {
+    setErr("");
+    try {
+      await deleteDoc(doc(db, "projects", projectId, "tasks", taskId));
+    }
+    catch (e) {
+      console.log(e.message);
+      setErr(e.code || e.message);
+    }
+  }
 
   const statusClass = (status) => {
     const s = (status || "").toLowerCase();
@@ -298,6 +310,9 @@ function Project() {
                 </span>
               )}
             </div>
+            <button className={styles.dangerBtn} onClick={() => deleteTask(t.id)}>
+              Delete Task
+            </button>
           </div>
         ))}
       </div>
