@@ -332,12 +332,14 @@ function Project() {
                   </span>
                 )}
               </div>
-              <button
+              {isOwner && (              
+                <button
                 className={styles.dangerBtn}
                 onClick={() => deleteTask(t.id)}
               >
                 Delete Task
-              </button>
+              </button>)}
+
             </div>
           ))}
         </div>
