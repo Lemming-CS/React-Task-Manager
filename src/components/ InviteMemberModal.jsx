@@ -14,104 +14,112 @@ import {
 import { db, auth } from "../firebase/config";
 
 function InviteMemberModal({ open, onClose, project }) {
-    const [text, setText] = useState("");
-    const [results, setResults] = useState([]);
-    const [selected, setSelected] = useState(null); // { uid, username }
-    const [msg, setMsg] = useState("");
-    const [loading, setLoading] = useState(false);
+  const [text, setText] = useState("");
+  const [results, setResults] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [msg, setMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [isChosen, setIsChosen] = useState(false);
+  const isOwner = project?.ownerId === auth.currentUser?.uid;
 
-    const isOwner = project?.ownerId === auth.currentUser?.uid;
+  useEffect(() => {
+    if (!open) {
+      setText("");
+      setResults([]);
+      setSelected(null);
+      setMsg("");
+      setLoading(false);
+    }
+  }, [open]);
 
-    useEffect(() => {
-        if (!open) {
-        setText("");
+  useEffect(() => {
+    const run = async () => {
+      setMsg("");
+
+      const qRaw = text.trim().toLowerCase();
+      if (!qRaw || qRaw.length < 2) {
         setResults([]);
-        setSelected(null);
-        setMsg("");
-        setLoading(false);
-        }
-    }, [open]);
+        setIsChosen(false);
+        return;
+      }
+      if (isChosen) {
+        setIsChosen(false);
+        return;
+      }
+      try {
+        const usersRef = collection(db, "users");
+        const q = query(
+          usersRef,
+          orderBy("usernameLower"),
+          where("usernameLower", ">=", qRaw),
+          where("usernameLower", "<", qRaw + "\uf8ff"),
+          limit(8),
+        );
 
-    useEffect(() => {
-        const run = async () => {
-        setMsg("");
+        const snap = await getDocs(q);
+        const list = snap.docs
+          .map((d) => ({ uid: d.id, ...d.data() }))
+          .filter((u) => u.uid !== auth.currentUser?.uid);
 
-        const qRaw = text.trim().toLowerCase();
-        if (!qRaw || qRaw.length < 2) {
-            setResults([]);
-            return;
-        }
-
-        try {
-            const usersRef = collection(db, "users");
-            const q = query(
-            usersRef,
-            orderBy("usernameLower"),
-            where("usernameLower", ">=", qRaw),
-            where("usernameLower", "<", qRaw + "\uf8ff"),
-            limit(8)
-            );
-
-            const snap = await getDocs(q);
-            const list = snap.docs
-            .map(d => ({ uid: d.id, ...d.data() }))
-            .filter(u => u.uid !== auth.currentUser?.uid);
-
-            setResults(list);
-        } catch (e) {
-            console.error(e);
-            setMsg(e.code || e.message);
-        }
-        };
-
-        run();
-    }, [text]);
-
-    const choose = (u) => {
-        setSelected({ uid: u.uid, username: u.username });
-        setText(u.username);
-        setResults([]);
+        setResults(list);
+      } catch (e) {
+        console.error(e);
+        setMsg(e.code || e.message);
+      }
     };
 
-    const sendInvite = async () => {
-        setMsg("");
-        if (!isOwner) return setMsg("Only owner can invite");
-        if (!selected?.uid) return setMsg("Choose a user from the list");
-        if (project.members?.includes(selected.uid)) return setMsg("User is already a member");
+    run();
+  }, [text]);
 
-        setLoading(true);
-        try {
-            const inviteId = `${project.id}_${selected.uid}`; // <-- важно
+  const choose = (u) => {
+    setSelected({ uid: u.uid, username: u.username });
+    setText(u.username);
+    setIsChosen(true);
+    setResults([]);
+  };
 
-            await setDoc(doc(db, "invites", inviteId), {
-            projectId: project.id,
-            projectTitle: project.title,
-            inviterId: auth.currentUser.uid,
-            inviterUsername: project.ownerUsername || "Owner",
-            toUid: selected.uid,
-            toUsername: selected.username,
-            status: "pending",
-            createdAt: serverTimestamp(),
-            });
+  const sendInvite = async () => {
+    setMsg("");
+    if (!isOwner) return setMsg("Only owner can invite");
+    if (!selected?.uid) return setMsg("Choose a user from the list");
+    if (project.members?.includes(selected.uid))
+      return setMsg("User is already a member");
 
-            setMsg("Invite sent ✅");
-            setSelected(null);
-        } catch (e) {
-            console.error(e);
-            setMsg(e.code || e.message);
-        } finally {
-            setLoading(false);
-        }
-    };
+    setLoading(true);
+    try {
+      const inviteId = `${project.id}_${selected.uid}`;
 
-    if (!open) return null;
+      await setDoc(doc(db, "invites", inviteId), {
+        projectId: project.id,
+        projectTitle: project.title,
+        inviterId: auth.currentUser.uid,
+        inviterUsername: project.ownerUsername || "Owner",
+        toUid: selected.uid,
+        toUsername: selected.username,
+        status: "pending",
+        createdAt: serverTimestamp(),
+      });
+
+      setMsg("Invite sent ✅");
+      setSelected(null);
+    } catch (e) {
+      console.error(e);
+      setMsg(e.code || e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!open) return null;
 
   return (
     <div className={styles.overlay} onMouseDown={onClose}>
       <div className={styles.modal} onMouseDown={(e) => e.stopPropagation()}>
         <div className={styles.head}>
           <h2>Invite collaborator</h2>
-          <button className={styles.x} onClick={onClose}>✕</button>
+          <button className={styles.x} onClick={onClose}>
+            ✕
+          </button>
         </div>
 
         <label className={styles.label}>Search username</label>
@@ -125,8 +133,13 @@ function InviteMemberModal({ open, onClose, project }) {
 
           {results.length > 0 && (
             <div className={styles.dropdown}>
-              {results.map(u => (
-                <button key={u.uid} type="button" className={styles.item} onMouseDown={() => choose(u)}>
+              {results.map((u) => (
+                <button
+                  key={u.uid}
+                  type="button"
+                  className={styles.item}
+                  onMouseDown={() => choose(u)}
+                >
                   <span className={styles.name}>{u.username}</span>
                   <span className={styles.uid}>{u.uid.slice(0, 6)}...</span>
                 </button>
@@ -138,7 +151,9 @@ function InviteMemberModal({ open, onClose, project }) {
         {msg && <p className={styles.msg}>{msg}</p>}
 
         <div className={styles.actions}>
-          <button className={styles.secondary} onClick={onClose}>Cancel</button>
+          <button className={styles.secondary} onClick={onClose}>
+            Cancel
+          </button>
           <button onClick={sendInvite} disabled={loading || !isOwner}>
             {loading ? "Sending..." : "Send invite"}
           </button>
