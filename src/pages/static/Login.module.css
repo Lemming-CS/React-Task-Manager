@@ -98,3 +98,12 @@ body[data-theme="dark"] .googleBtn {
     min-height: 46px;
   }
 }
+
+@media (max-width: 420px) {
+  .login {
+    width: 67vw;
+  }
+  .googleBtn {
+    font-size: small;
+  }
+}

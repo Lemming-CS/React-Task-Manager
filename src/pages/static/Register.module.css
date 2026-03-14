@@ -95,3 +95,10 @@
     border-radius: 16px;
   }
 }
+
+@media (max-width: 420px) {
+  .register {
+    width: 67vw;
+  }
+
+}
