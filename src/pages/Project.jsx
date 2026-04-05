@@ -4,7 +4,7 @@ import { useStore } from "../store/useStore";
 import Header from "../components/Header";
 import CreateTaskModal from "../components/CreateTaskModal";
 import EditTasksModal from "../components/EditTasksModal";
-import InviteMemberModal from "../components/ InviteMemberModal";
+import InviteMemberModal from "../components/InviteMemberModal";
 import {
   doc,
   getDoc,
